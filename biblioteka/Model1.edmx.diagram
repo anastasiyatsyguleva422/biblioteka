@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="875d640fd547484fbb14a58ae26c6bf6" Name="Diagram1" ZoomLevel="64">
+        <EntityTypeShape EntityType="Model.Авторы" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Библиотекари" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Возвраты" Width="1.5" PointX="7.5" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Выдачи" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Жанры" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Книги" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Студенты" Width="1.5" PointX="3" PointY="7.875" IsExpanded="true" />
+        <AssociationConnector Association="Model.FK__Книги__ID_Автора__3E52440B" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Выдачи__ID_Библи__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Возвраты__ID_Выд__4BAC3F29" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Выдачи__ID_Книги__45F365D3" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Выдачи__ID_Студе__46E78A0C" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Книги__ID_Жанра__3F466844" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

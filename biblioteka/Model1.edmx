@@ -1,0 +1,465 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Авторы">
+          <Key>
+            <PropertyRef Name="ID_Автора" />
+          </Key>
+          <Property Name="ID_Автора" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ФИО" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Страна" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Библиотекари">
+          <Key>
+            <PropertyRef Name="ID_Библиотекаря" />
+          </Key>
+          <Property Name="ID_Библиотекаря" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ФИО" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Логин" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Пароль" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Возвраты">
+          <Key>
+            <PropertyRef Name="ID_Возврата" />
+          </Key>
+          <Property Name="ID_Возврата" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Выдачи" Type="int" Nullable="false" />
+          <Property Name="Дата_Возврата" Type="date" Nullable="false" />
+          <Property Name="Состояние" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Выдачи">
+          <Key>
+            <PropertyRef Name="ID_Выдачи" />
+          </Key>
+          <Property Name="ID_Выдачи" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Книги" Type="int" Nullable="false" />
+          <Property Name="ID_Студента" Type="int" Nullable="false" />
+          <Property Name="ID_Библиотекаря" Type="int" Nullable="false" />
+          <Property Name="Дата_Выдачи" Type="date" Nullable="false" />
+          <Property Name="Срок_Возврата" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Жанры">
+          <Key>
+            <PropertyRef Name="ID_Жанра" />
+          </Key>
+          <Property Name="ID_Жанра" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Название" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Книги">
+          <Key>
+            <PropertyRef Name="ID_Книги" />
+          </Key>
+          <Property Name="ID_Книги" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Название" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ID_Автора" Type="int" Nullable="false" />
+          <Property Name="ID_Жанра" Type="int" Nullable="false" />
+          <Property Name="Год_Издания" Type="int" />
+          <Property Name="Количество" Type="int" />
+        </EntityType>
+        <EntityType Name="Студенты">
+          <Key>
+            <PropertyRef Name="ID_Студента" />
+          </Key>
+          <Property Name="ID_Студента" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ФИО" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Группа" Type="nvarchar" MaxLength="50" />
+          <Property Name="Почта" Type="nvarchar" MaxLength="100" />
+          <Property Name="Телефон" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <Association Name="FK__Возвраты__ID_Выд__4BAC3F29">
+          <End Role="Выдачи" Type="Self.Выдачи" Multiplicity="1" />
+          <End Role="Возвраты" Type="Self.Возвраты" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Выдачи">
+              <PropertyRef Name="ID_Выдачи" />
+            </Principal>
+            <Dependent Role="Возвраты">
+              <PropertyRef Name="ID_Выдачи" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Выдачи__ID_Библи__47DBAE45">
+          <End Role="Библиотекари" Type="Self.Библиотекари" Multiplicity="1" />
+          <End Role="Выдачи" Type="Self.Выдачи" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Библиотекари">
+              <PropertyRef Name="ID_Библиотекаря" />
+            </Principal>
+            <Dependent Role="Выдачи">
+              <PropertyRef Name="ID_Библиотекаря" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Выдачи__ID_Книги__45F365D3">
+          <End Role="Книги" Type="Self.Книги" Multiplicity="1" />
+          <End Role="Выдачи" Type="Self.Выдачи" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Книги">
+              <PropertyRef Name="ID_Книги" />
+            </Principal>
+            <Dependent Role="Выдачи">
+              <PropertyRef Name="ID_Книги" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Выдачи__ID_Студе__46E78A0C">
+          <End Role="Студенты" Type="Self.Студенты" Multiplicity="1" />
+          <End Role="Выдачи" Type="Self.Выдачи" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Студенты">
+              <PropertyRef Name="ID_Студента" />
+            </Principal>
+            <Dependent Role="Выдачи">
+              <PropertyRef Name="ID_Студента" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Книги__ID_Автора__3E52440B">
+          <End Role="Авторы" Type="Self.Авторы" Multiplicity="1" />
+          <End Role="Книги" Type="Self.Книги" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Авторы">
+              <PropertyRef Name="ID_Автора" />
+            </Principal>
+            <Dependent Role="Книги">
+              <PropertyRef Name="ID_Автора" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Книги__ID_Жанра__3F466844">
+          <End Role="Жанры" Type="Self.Жанры" Multiplicity="1" />
+          <End Role="Книги" Type="Self.Книги" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Жанры">
+              <PropertyRef Name="ID_Жанра" />
+            </Principal>
+            <Dependent Role="Книги">
+              <PropertyRef Name="ID_Жанра" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ModelContainer">
+          <EntitySet Name="Авторы" EntityType="Self.Авторы" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Библиотекари" EntityType="Self.Библиотекари" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Возвраты" EntityType="Self.Возвраты" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Выдачи" EntityType="Self.Выдачи" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Жанры" EntityType="Self.Жанры" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Книги" EntityType="Self.Книги" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Студенты" EntityType="Self.Студенты" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Возвраты__ID_Выд__4BAC3F29" Association="Self.FK__Возвраты__ID_Выд__4BAC3F29">
+            <End Role="Выдачи" EntitySet="Выдачи" />
+            <End Role="Возвраты" EntitySet="Возвраты" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Выдачи__ID_Библи__47DBAE45" Association="Self.FK__Выдачи__ID_Библи__47DBAE45">
+            <End Role="Библиотекари" EntitySet="Библиотекари" />
+            <End Role="Выдачи" EntitySet="Выдачи" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Выдачи__ID_Книги__45F365D3" Association="Self.FK__Выдачи__ID_Книги__45F365D3">
+            <End Role="Книги" EntitySet="Книги" />
+            <End Role="Выдачи" EntitySet="Выдачи" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Выдачи__ID_Студе__46E78A0C" Association="Self.FK__Выдачи__ID_Студе__46E78A0C">
+            <End Role="Студенты" EntitySet="Студенты" />
+            <End Role="Выдачи" EntitySet="Выдачи" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Книги__ID_Автора__3E52440B" Association="Self.FK__Книги__ID_Автора__3E52440B">
+            <End Role="Авторы" EntitySet="Авторы" />
+            <End Role="Книги" EntitySet="Книги" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Книги__ID_Жанра__3F466844" Association="Self.FK__Книги__ID_Жанра__3F466844">
+            <End Role="Жанры" EntitySet="Жанры" />
+            <End Role="Книги" EntitySet="Книги" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Авторы">
+          <Key>
+            <PropertyRef Name="ID_Автора" />
+          </Key>
+          <Property Name="ID_Автора" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ФИО" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Страна" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Книги" Relationship="Self.FK__Книги__ID_Автора__3E52440B" FromRole="Авторы" ToRole="Книги" />
+        </EntityType>
+        <EntityType Name="Библиотекари">
+          <Key>
+            <PropertyRef Name="ID_Библиотекаря" />
+          </Key>
+          <Property Name="ID_Библиотекаря" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ФИО" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Логин" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Пароль" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Выдачи" Relationship="Self.FK__Выдачи__ID_Библи__47DBAE45" FromRole="Библиотекари" ToRole="Выдачи" />
+        </EntityType>
+        <EntityType Name="Возвраты">
+          <Key>
+            <PropertyRef Name="ID_Возврата" />
+          </Key>
+          <Property Name="ID_Возврата" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_Выдачи" Type="Int32" Nullable="false" />
+          <Property Name="Дата_Возврата" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Состояние" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Выдачи" Relationship="Self.FK__Возвраты__ID_Выд__4BAC3F29" FromRole="Возвраты" ToRole="Выдачи" />
+        </EntityType>
+        <EntityType Name="Выдачи">
+          <Key>
+            <PropertyRef Name="ID_Выдачи" />
+          </Key>
+          <Property Name="ID_Выдачи" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_Книги" Type="Int32" Nullable="false" />
+          <Property Name="ID_Студента" Type="Int32" Nullable="false" />
+          <Property Name="ID_Библиотекаря" Type="Int32" Nullable="false" />
+          <Property Name="Дата_Выдачи" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Срок_Возврата" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Библиотекари" Relationship="Self.FK__Выдачи__ID_Библи__47DBAE45" FromRole="Выдачи" ToRole="Библиотекари" />
+          <NavigationProperty Name="Возвраты" Relationship="Self.FK__Возвраты__ID_Выд__4BAC3F29" FromRole="Выдачи" ToRole="Возвраты" />
+          <NavigationProperty Name="Книги" Relationship="Self.FK__Выдачи__ID_Книги__45F365D3" FromRole="Выдачи" ToRole="Книги" />
+          <NavigationProperty Name="Студенты" Relationship="Self.FK__Выдачи__ID_Студе__46E78A0C" FromRole="Выдачи" ToRole="Студенты" />
+        </EntityType>
+        <EntityType Name="Жанры">
+          <Key>
+            <PropertyRef Name="ID_Жанра" />
+          </Key>
+          <Property Name="ID_Жанра" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Название" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Книги" Relationship="Self.FK__Книги__ID_Жанра__3F466844" FromRole="Жанры" ToRole="Книги" />
+        </EntityType>
+        <EntityType Name="Книги">
+          <Key>
+            <PropertyRef Name="ID_Книги" />
+          </Key>
+          <Property Name="ID_Книги" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Название" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ID_Автора" Type="Int32" Nullable="false" />
+          <Property Name="ID_Жанра" Type="Int32" Nullable="false" />
+          <Property Name="Год_Издания" Type="Int32" />
+          <Property Name="Количество" Type="Int32" />
+          <NavigationProperty Name="Авторы" Relationship="Self.FK__Книги__ID_Автора__3E52440B" FromRole="Книги" ToRole="Авторы" />
+          <NavigationProperty Name="Выдачи" Relationship="Self.FK__Выдачи__ID_Книги__45F365D3" FromRole="Книги" ToRole="Выдачи" />
+          <NavigationProperty Name="Жанры" Relationship="Self.FK__Книги__ID_Жанра__3F466844" FromRole="Книги" ToRole="Жанры" />
+        </EntityType>
+        <EntityType Name="Студенты">
+          <Key>
+            <PropertyRef Name="ID_Студента" />
+          </Key>
+          <Property Name="ID_Студента" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ФИО" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Группа" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Почта" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Телефон" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Выдачи" Relationship="Self.FK__Выдачи__ID_Студе__46E78A0C" FromRole="Студенты" ToRole="Выдачи" />
+        </EntityType>
+        <Association Name="FK__Книги__ID_Автора__3E52440B">
+          <End Role="Авторы" Type="Self.Авторы" Multiplicity="1" />
+          <End Role="Книги" Type="Self.Книги" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Авторы">
+              <PropertyRef Name="ID_Автора" />
+            </Principal>
+            <Dependent Role="Книги">
+              <PropertyRef Name="ID_Автора" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Выдачи__ID_Библи__47DBAE45">
+          <End Role="Библиотекари" Type="Self.Библиотекари" Multiplicity="1" />
+          <End Role="Выдачи" Type="Self.Выдачи" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Библиотекари">
+              <PropertyRef Name="ID_Библиотекаря" />
+            </Principal>
+            <Dependent Role="Выдачи">
+              <PropertyRef Name="ID_Библиотекаря" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Возвраты__ID_Выд__4BAC3F29">
+          <End Role="Выдачи" Type="Self.Выдачи" Multiplicity="1" />
+          <End Role="Возвраты" Type="Self.Возвраты" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Выдачи">
+              <PropertyRef Name="ID_Выдачи" />
+            </Principal>
+            <Dependent Role="Возвраты">
+              <PropertyRef Name="ID_Выдачи" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Выдачи__ID_Книги__45F365D3">
+          <End Role="Книги" Type="Self.Книги" Multiplicity="1" />
+          <End Role="Выдачи" Type="Self.Выдачи" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Книги">
+              <PropertyRef Name="ID_Книги" />
+            </Principal>
+            <Dependent Role="Выдачи">
+              <PropertyRef Name="ID_Книги" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Выдачи__ID_Студе__46E78A0C">
+          <End Role="Студенты" Type="Self.Студенты" Multiplicity="1" />
+          <End Role="Выдачи" Type="Self.Выдачи" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Студенты">
+              <PropertyRef Name="ID_Студента" />
+            </Principal>
+            <Dependent Role="Выдачи">
+              <PropertyRef Name="ID_Студента" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Книги__ID_Жанра__3F466844">
+          <End Role="Жанры" Type="Self.Жанры" Multiplicity="1" />
+          <End Role="Книги" Type="Self.Книги" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Жанры">
+              <PropertyRef Name="ID_Жанра" />
+            </Principal>
+            <Dependent Role="Книги">
+              <PropertyRef Name="ID_Жанра" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="студенческая_библиотекаEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Авторы" EntityType="Self.Авторы" />
+          <EntitySet Name="Библиотекари" EntityType="Self.Библиотекари" />
+          <EntitySet Name="Возвраты" EntityType="Self.Возвраты" />
+          <EntitySet Name="Выдачи" EntityType="Self.Выдачи" />
+          <EntitySet Name="Жанры" EntityType="Self.Жанры" />
+          <EntitySet Name="Книги" EntityType="Self.Книги" />
+          <EntitySet Name="Студенты" EntityType="Self.Студенты" />
+          <AssociationSet Name="FK__Книги__ID_Автора__3E52440B" Association="Self.FK__Книги__ID_Автора__3E52440B">
+            <End Role="Авторы" EntitySet="Авторы" />
+            <End Role="Книги" EntitySet="Книги" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Выдачи__ID_Библи__47DBAE45" Association="Self.FK__Выдачи__ID_Библи__47DBAE45">
+            <End Role="Библиотекари" EntitySet="Библиотекари" />
+            <End Role="Выдачи" EntitySet="Выдачи" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Возвраты__ID_Выд__4BAC3F29" Association="Self.FK__Возвраты__ID_Выд__4BAC3F29">
+            <End Role="Выдачи" EntitySet="Выдачи" />
+            <End Role="Возвраты" EntitySet="Возвраты" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Выдачи__ID_Книги__45F365D3" Association="Self.FK__Выдачи__ID_Книги__45F365D3">
+            <End Role="Книги" EntitySet="Книги" />
+            <End Role="Выдачи" EntitySet="Выдачи" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Выдачи__ID_Студе__46E78A0C" Association="Self.FK__Выдачи__ID_Студе__46E78A0C">
+            <End Role="Студенты" EntitySet="Студенты" />
+            <End Role="Выдачи" EntitySet="Выдачи" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Книги__ID_Жанра__3F466844" Association="Self.FK__Книги__ID_Жанра__3F466844">
+            <End Role="Жанры" EntitySet="Жанры" />
+            <End Role="Книги" EntitySet="Книги" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ModelContainer" CdmEntityContainer="студенческая_библиотекаEntities1">
+          <EntitySetMapping Name="Авторы">
+            <EntityTypeMapping TypeName="Model.Авторы">
+              <MappingFragment StoreEntitySet="Авторы">
+                <ScalarProperty Name="ID_Автора" ColumnName="ID_Автора" />
+                <ScalarProperty Name="ФИО" ColumnName="ФИО" />
+                <ScalarProperty Name="Страна" ColumnName="Страна" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Библиотекари">
+            <EntityTypeMapping TypeName="Model.Библиотекари">
+              <MappingFragment StoreEntitySet="Библиотекари">
+                <ScalarProperty Name="ID_Библиотекаря" ColumnName="ID_Библиотекаря" />
+                <ScalarProperty Name="ФИО" ColumnName="ФИО" />
+                <ScalarProperty Name="Логин" ColumnName="Логин" />
+                <ScalarProperty Name="Пароль" ColumnName="Пароль" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Возвраты">
+            <EntityTypeMapping TypeName="Model.Возвраты">
+              <MappingFragment StoreEntitySet="Возвраты">
+                <ScalarProperty Name="ID_Возврата" ColumnName="ID_Возврата" />
+                <ScalarProperty Name="ID_Выдачи" ColumnName="ID_Выдачи" />
+                <ScalarProperty Name="Дата_Возврата" ColumnName="Дата_Возврата" />
+                <ScalarProperty Name="Состояние" ColumnName="Состояние" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Выдачи">
+            <EntityTypeMapping TypeName="Model.Выдачи">
+              <MappingFragment StoreEntitySet="Выдачи">
+                <ScalarProperty Name="ID_Выдачи" ColumnName="ID_Выдачи" />
+                <ScalarProperty Name="ID_Книги" ColumnName="ID_Книги" />
+                <ScalarProperty Name="ID_Студента" ColumnName="ID_Студента" />
+                <ScalarProperty Name="ID_Библиотекаря" ColumnName="ID_Библиотекаря" />
+                <ScalarProperty Name="Дата_Выдачи" ColumnName="Дата_Выдачи" />
+                <ScalarProperty Name="Срок_Возврата" ColumnName="Срок_Возврата" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Жанры">
+            <EntityTypeMapping TypeName="Model.Жанры">
+              <MappingFragment StoreEntitySet="Жанры">
+                <ScalarProperty Name="ID_Жанра" ColumnName="ID_Жанра" />
+                <ScalarProperty Name="Название" ColumnName="Название" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Книги">
+            <EntityTypeMapping TypeName="Model.Книги">
+              <MappingFragment StoreEntitySet="Книги">
+                <ScalarProperty Name="ID_Книги" ColumnName="ID_Книги" />
+                <ScalarProperty Name="Название" ColumnName="Название" />
+                <ScalarProperty Name="ID_Автора" ColumnName="ID_Автора" />
+                <ScalarProperty Name="ID_Жанра" ColumnName="ID_Жанра" />
+                <ScalarProperty Name="Год_Издания" ColumnName="Год_Издания" />
+                <ScalarProperty Name="Количество" ColumnName="Количество" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Студенты">
+            <EntityTypeMapping TypeName="Model.Студенты">
+              <MappingFragment StoreEntitySet="Студенты">
+                <ScalarProperty Name="ID_Студента" ColumnName="ID_Студента" />
+                <ScalarProperty Name="ФИО" ColumnName="ФИО" />
+                <ScalarProperty Name="Группа" ColumnName="Группа" />
+                <ScalarProperty Name="Почта" ColumnName="Почта" />
+                <ScalarProperty Name="Телефон" ColumnName="Телефон" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
