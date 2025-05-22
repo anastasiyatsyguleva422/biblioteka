@@ -1,39 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static System.Collections.Specialized.BitVector32;
 
 namespace biblioteka
 {
     /// <summary>
-    /// Логика взаимодействия для VidachaPage.xaml
+    /// Страница выдачи книг студентам.
     /// </summary>
     public partial class VidachaPage : Page
     {
         private readonly студенческая_библиотекаEntities1 _context;
+
+        /// <summary>
+        /// Инициализирует новый экземпляр страницы <see cref="VidachaPage"/>.
+        /// Загружает список книг и студентов.
+        /// </summary>
         public VidachaPage()
         {
             InitializeComponent();
             _context = new студенческая_библиотекаEntities1();
             LoadData();
         }
+
+        /// <summary>
+        /// Загружает данные в комбобоксы: список книг и студентов.
+        /// </summary>
         private void LoadData()
         {
             BookComboBox.ItemsSource = _context.Книги.ToList();
             StudentComboBox.ItemsSource = _context.Студенты.ToList();
         }
 
+        /// <summary>
+        /// Обрабатывает нажатие кнопки "Выдать книгу".
+        /// Выполняет проверку и добавляет новую запись о выдаче.
+        /// </summary>
+        /// <param name="sender">Источник события (кнопка).</param>
+        /// <param name="e">Аргументы события.</param>
         private void Book_Click(object sender, RoutedEventArgs e)
         {
             if (BookComboBox.SelectedValue == null || StudentComboBox.SelectedValue == null || !DataPicker.SelectedDate.HasValue)
@@ -89,6 +93,12 @@ namespace biblioteka
             MessageBox.Show("Книга успешно выдана.");
         }
 
+        /// <summary>
+        /// Обрабатывает нажатие кнопки "Назад".
+        /// Переходит на предыдущую страницу, если это возможно.
+        /// </summary>
+        /// <param name="sender">Источник события (кнопка).</param>
+        /// <param name="e">Аргументы события.</param>
         private void GoBack_Click(object sender, RoutedEventArgs e)
         {
             if (NavigationService?.CanGoBack == true)
@@ -102,3 +112,4 @@ namespace biblioteka
         }
     }
 }
+

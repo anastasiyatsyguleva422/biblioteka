@@ -1,28 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace biblioteka
-{   
+{
+    /// <summary>
+    /// Страница возврата книг.
+    /// Позволяет регистрировать возврат ранее выданной книги.
+    /// </summary>
     public partial class VozvratPage : Page
     {
         private студенческая_библиотекаEntities1 _context = new студенческая_библиотекаEntities1();
+
+        /// <summary>
+        /// Инициализирует новый экземпляр страницы <see cref="VozvratPage"/>.
+        /// Загружает список активных выдач.
+        /// </summary>
         public VozvratPage()
         {
             InitializeComponent();
             LoadIssues();
         }
+
+        /// <summary>
+        /// Загружает список всех активных (не возвращённых) выдач.
+        /// </summary>
         private void LoadIssues()
         {
             var activeIssues = _context.Выдачи
@@ -35,11 +38,17 @@ namespace biblioteka
                 })
                 .ToList();
 
-            IssueComboBox.ItemsSource = activeIssues; 
+            IssueComboBox.ItemsSource = activeIssues;
             IssueComboBox.DisplayMemberPath = "Описание";
             IssueComboBox.SelectedValuePath = "ID_Выдачи";
         }
 
+        /// <summary>
+        /// Обрабатывает нажатие кнопки возврата книги.
+        /// Добавляет запись о возврате, обновляет количество книг.
+        /// </summary>
+        /// <param name="sender">Источник события (кнопка).</param>
+        /// <param name="e">Аргументы события.</param>
         private void Vozvrat_Click(object sender, RoutedEventArgs e)
         {
             if (IssueComboBox.SelectedValue == null || string.IsNullOrWhiteSpace(BookConditionTextBox.Text))
@@ -79,7 +88,12 @@ namespace biblioteka
             LoadIssues();
         }
 
-
+        /// <summary>
+        /// Обрабатывает нажатие кнопки "Назад".
+        /// Переходит к предыдущей странице, если это возможно.
+        /// </summary>
+        /// <param name="sender">Источник события (кнопка).</param>
+        /// <param name="e">Аргументы события.</param>
         private void GoBack_Click(object sender, RoutedEventArgs e)
         {
             if (NavigationService?.CanGoBack == true)
@@ -93,3 +107,4 @@ namespace biblioteka
         }
     }
 }
+
