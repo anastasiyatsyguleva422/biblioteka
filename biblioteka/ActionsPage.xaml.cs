@@ -57,5 +57,11 @@ namespace biblioteka
         {
             NavigationService?.Navigate(new ArxivPage());
         }
+
+        private void GoToReport_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new ReportPage());
+
+        }
     }
 }

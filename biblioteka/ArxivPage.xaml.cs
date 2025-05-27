@@ -1,54 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace biblioteka
 {
-    /// <summary>
-    /// Представляет страницу архива книг в приложении библиотеки.
-    /// Позволяет просматривать и редактировать информацию о книгах.
-    /// </summary>
     public partial class ArxivPage : Page
     {
-        /// <summary>
-        /// Контекст базы данных библиотеки.
-        /// </summary>
         private readonly студенческая_библиотекаEntities1 _context;
 
-        /// <summary>
-        /// Инициализирует новый экземпляр страницы <see cref="ArxivPage"/>.
-        /// Загружает список книг и годов издания.
-        /// </summary>
         public ArxivPage()
         {
             InitializeComponent();
             _context = new студенческая_библиотекаEntities1();
             LoadBooks();
             LoadYears();
+            LoadCountries();
         }
 
-        /// <summary>
-        /// Загружает список книг из базы данных и устанавливает его источником данных для <c>BookComboBox</c>.
-        /// </summary>
         private void LoadBooks()
         {
             BookComboBox.ItemsSource = _context.Книги.ToList();
         }
 
-        /// <summary>
-        /// Загружает список годов от текущего до 1900 года в <c>YearComboBox</c>.
-        /// </summary>
         private void LoadYears()
         {
             for (int year = DateTime.Now.Year; year >= 1900; year--)
@@ -57,12 +31,17 @@ namespace biblioteka
             }
         }
 
-        /// <summary>
-        /// Обрабатывает выбор книги из списка. 
-        /// Загружает и отображает данные книги, автора, жанра и года издания.
-        /// </summary>
-        /// <param name="sender">Источник события.</param>
-        /// <param name="e">Аргументы события выбора элемента.</param>
+        private void LoadCountries()
+        {
+            var countries = _context.Авторы
+                .Select(a => a.Страна)
+                .Distinct()
+                .OrderBy(c => c)
+                .ToList();
+
+            CountryComboBox.ItemsSource = countries;
+        }
+
         private void BookComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (BookComboBox.SelectedItem is Книги selectedBook)
@@ -73,12 +52,15 @@ namespace biblioteka
                 if (author != null)
                 {
                     AuthorTextBox.Text = author.ФИО;
-                    CountryTextBox.Text = author.Страна;
+                    CountryComboBox.SelectedItem = CountryComboBox.Items
+     .Cast<string>()
+     .FirstOrDefault(c => c != null && c.Equals(author.Страна, StringComparison.OrdinalIgnoreCase));
+
                 }
                 else
                 {
                     AuthorTextBox.Text = "";
-                    CountryTextBox.Text = "";
+                    CountryComboBox.SelectedIndex = -1;
                 }
 
                 var genre = _context.Жанры.FirstOrDefault(g => g.ID_Жанра == selectedBook.ID_Жанра);
@@ -89,25 +71,35 @@ namespace biblioteka
             }
         }
 
-        /// <summary>
-        /// Сохраняет изменения в выбранной книге, включая автора, жанр, год и количество.
-        /// </summary>
-        /// <param name="sender">Источник события.</param>
-        /// <param name="e">Аргументы события нажатия кнопки.</param>
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (BookComboBox.SelectedItem is Книги selectedBook)
             {
                 try
                 {
+                    if (string.IsNullOrWhiteSpace(CountryComboBox.Text))
+                    {
+                        MessageBox.Show("Выберите страну автора!");
+                        return;
+                    }
+
                     selectedBook.Название = TitleTextBox.Text;
 
                     // Работа с автором
                     var authorName = AuthorTextBox.Text.Trim();
-                    var author = _context.Авторы.FirstOrDefault(a => a.ФИО == authorName);
+                    var country = CountryComboBox.Text.Trim();
+
+                    var author = _context.Авторы.FirstOrDefault(a =>
+                        a.ФИО == authorName &&
+                        a.Страна == country);
+
                     if (author == null)
                     {
-                        author = new Авторы { ФИО = authorName };
+                        author = new Авторы
+                        {
+                            ФИО = authorName,
+                            Страна = country
+                        };
                         _context.Авторы.Add(author);
                         _context.SaveChanges();
                     }
@@ -131,11 +123,16 @@ namespace biblioteka
                     selectedBook.Количество = int.Parse(QuantityTextBox.Text);
 
                     _context.SaveChanges();
+
+                    LoadCountries(); // Обновляем список стран
+                    LoadBooks();     // Обновляем список книг
+                    BookComboBox.SelectedItem = selectedBook;
+
                     MessageBox.Show("Изменения успешно сохранены!");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка при сохранении: " + ex.Message);
+                    MessageBox.Show($"Ошибка при сохранении: {ex.Message}");
                 }
             }
             else
@@ -144,11 +141,6 @@ namespace biblioteka
             }
         }
 
-        /// <summary>
-        /// Обрабатывает нажатие кнопки «Назад» и возвращает пользователя на предыдущую страницу.
-        /// </summary>
-        /// <param name="sender">Источник события.</param>
-        /// <param name="e">Аргументы события нажатия кнопки.</param>
         private void GoBack_Click(object sender, RoutedEventArgs e)
         {
             if (NavigationService?.CanGoBack == true)

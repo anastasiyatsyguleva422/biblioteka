@@ -26,7 +26,7 @@
                 <TextBox x:Name="AuthorTextBox" />
 
                 <Label Content="Страна автора:" />
-                <TextBox x:Name="CountryTextBox" />
+                <ComboBox x:Name="CountryComboBox" IsEditable="True" IsTextSearchEnabled="True" />
 
                 <Label Content="Жанр:" />
                 <TextBox x:Name="GenreTextBox" />
@@ -41,7 +41,6 @@
                     <Button Content="Сохранить изменения" Click="SaveButton_Click" Margin="5"/>
                     <Button Content="Назад" Click="GoBack_Click" Margin="5"/>
                 </StackPanel>
-
             </StackPanel>
         </ScrollViewer>
     </Grid>
